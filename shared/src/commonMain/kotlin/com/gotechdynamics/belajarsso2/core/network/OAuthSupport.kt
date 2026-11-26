@@ -10,18 +10,6 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 
-/** Konfigurasi publik tanpa client secret. HTTP hanya boleh untuk emulator debug. */
-data class OAuthConfig(
-    val issuer: String,
-    val clientId: String,
-    val redirectUri: String,
-    val allowEmulatorHttp: Boolean = false,
-) {
-    fun isUsable(): Boolean = clientId.isNotBlank() && !clientId.contains('<') &&
-        !clientId.contains("ISI_CLIENT", ignoreCase = true) &&
-        (issuer.startsWith("https://") || (allowEmulatorHttp && issuer == "http://10.0.2.2:8000"))
-}
-
 object OAuthCodec {
     private val json = Json { ignoreUnknownKeys = true }
     fun encodeTokens(value: TokenRecord): String = json.encodeToString(value)
